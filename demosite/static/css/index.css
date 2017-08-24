@@ -1,0 +1,33 @@
+#search_wordcloud{
+    background-color: #fffafa;
+}
+.tab-content{
+    width: 600px;
+    height: 600px;
+}
+
+#title_wordcloud{
+    background-color: #ffffff;
+}
+
+#legend-mizuho{
+    color: #000080;
+}
+#legend-btmu{
+    color: #8b0000;
+}
+#legend-smbc{
+    color: #006400;
+}
+#legend-mb{
+    color: #8b008b;
+}
+#legend-ms{
+    color: #87cefa;
+}
+#legend-bs{
+    color: #fcc800;
+}
+#legend-all{
+    color: #504946;
+}

@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<!-- form -->
+
+    <div class="navbar navbar-inverse bg-inverse">
+      <div class="container d-flex justify-content-between">
+        <a href="#" class="navbar-brand"><h4>ブレスト会議サポートアプリケーション</h4></a>
+      </div>
+    </div>
+
+    <div class="container">
+        <div class="jumbotron">
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>発散</h3>
+                    <p>キーワードに関連する単語をニュースリリース情報から見ることで、取り組み内容の洞察をサポートします。</p>
+                    <div id="title_wordcloud"></div>
+                </div>
+                <div class="col-md-6">
+                    <h3>収束</h3>
+                    <p>ニュースリリース情報を参照し、詳細な取り組み内容を確認します</p>
+                    <a href="http://www.smbc.co.jp/news/" target="_blank"><h3>三井住友銀行ニュースサイト</h3></a>
+                    <a href="http://www.bk.mufg.jp/news/index.html" target="_blank"><h3>三菱東京UFJ銀行ニュースサイト</h3></a>
+                    <a href="https://www.mizuhobank.co.jp/release/index.html" target="_blank"><h3>三井住友銀行ニュースサイト</h3></a>
+                </div>
+            </div>      
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <p>キーワード</p>
+                    <input type="text" class="form-control" id="searchword" placeholder="キーワードを入力してください">
+                    </br>
+                    <button type="button" id="search" class="btn btn-default">関連ワードを取得する</button>   
+                    <ol id="searchwordlist"></ol>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="pull-right">
+                    <button type="button" id="legendModalButton" class="btn btn-primary">凡例</button>
+                </div>
+                <div id="search_wordcloud"></div>
+                <div class="pull-right">
+                    <button type="button" id="clear" class="btn btn-default al">クリア</button>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4"></div>
+            <div class="col-md-8">
+                
+            </div>
+        </div>
+        <!-- モーダル・ダイアログ -->
+        <div class="modal fade" id="legendModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span>×</span>
+                        </button>
+                        <h4 class="modal-title">凡例</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p id="legend-mizuho">みずほ</p>
+                        <p id="legend-btmu">三菱東京UFJ</p>
+                        <p id="legend-smbc">三井住友</p>
+                        <p id="legend-mb">みずほ + 三菱東京UFJ</p>
+                        <p id="legend-ms">みずほ + 三井住友</p>
+                        <p id="legend-bs">三菱東京UFJ + 三井住友</p>
+                        <p id="legend-all">全部</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-12">
+                <canvas id="mychart" width="600" height="400"></canvas>
+            </div>
+        </div>
+    </div>
+    <script language="javascript">
+        function opennewssite(text,id){
+            if(id == 1){
+                // みずほ
+                window.open("https://search.www.mizuhobank.co.jp/search?site=K2TPFCDI&design=1&group=1&charset=UTF-8&count=&pdf=&field=&mapion=0&query=" + text + "&category=2");
+            }else if(id == 2){
+                // BTMU
+                window.open("http://bk-mufg.jeevessolutions.jp/AJSearch.asp?sid=132_40_115_252_211_20170822120642_1442853&origin=1&type=&aj_charset=UTF-8&ask=" + text);
+            }else if(id == 4){
+                // SMBC
+                window.open("http://pro.syncsearch.jp/search?site=O2RW5PF1&charset=UTF-8&design=3&query=" + text + "&submit=%8C%9F%8D%F5");
+            }else if(id == 3){
+                // みずほ BTMU
+                window.open("https://search.www.mizuhobank.co.jp/search?site=K2TPFCDI&design=1&group=1&charset=UTF-8&count=&pdf=&field=&mapion=0&query=" + text + "&category=2");
+                window.open("http://bk-mufg.jeevessolutions.jp/AJSearch.asp?sid=132_40_115_252_211_20170822120642_1442853&origin=1&type=&aj_charset=UTF-8&ask=" + text);
+            }else if(id == 5){
+                // みずほ SMBC
+                window.open("https://search.www.mizuhobank.co.jp/search?site=K2TPFCDI&design=1&group=1&charset=UTF-8&count=&pdf=&field=&mapion=0&query=" + text + "&category=2");
+                window.open("http://pro.syncsearch.jp/search?site=O2RW5PF1&charset=UTF-8&design=3&query=" + text + "&submit=%8C%9F%8D%F5");
+            }else if(id == 6){
+                // BTMU SMBC
+                window.open("http://pro.syncsearch.jp/search?site=O2RW5PF1&charset=UTF-8&design=3&query=" + text + "&submit=%8C%9F%8D%F5");
+                window.open("http://bk-mufg.jeevessolutions.jp/AJSearch.asp?sid=132_40_115_252_211_20170822120642_1442853&origin=1&type=&aj_charset=UTF-8&ask=" + text);
+            }else if(id == 7){
+                // みずほ BTMU SMBC
+                window.open("https://search.www.mizuhobank.co.jp/search?site=K2TPFCDI&design=1&group=1&charset=UTF-8&count=&pdf=&field=&mapion=0&query=" + text + "&category=2");
+                window.open("http://pro.syncsearch.jp/search?site=O2RW5PF1&charset=UTF-8&design=3&query=" + text + "&submit=%8C%9F%8D%F5");
+                window.open("http://bk-mufg.jeevessolutions.jp/AJSearch.asp?sid=132_40_115_252_211_20170822120642_1442853&origin=1&type=&aj_charset=UTF-8&ask=" + text);
+            }
+        };
+    </script>
+{% endblock %}
